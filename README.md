@@ -1,6 +1,11 @@
 # Minería de Datos e Inteligencia Artificial: De la Pregunta al Insight
 ## Análisis de Factores de Rendimiento Académico en Estudiantes de Secundaria
 
+[![Área](https://img.shields.io/badge/%C3%81rea-Ciencia%20de%20Datos-blue?style=flat-square&logo=databricks)](https://github.com/FabianTG/mineria-datos-rendimiento-academico)
+[![Modelos](https://img.shields.io/badge/Modelos-Regresi%C3%B3n%20%26%20K--Means-orange?style=flat-square&logo=scikit-learn)](https://scikit-learn.org/)
+[![Tecnologías](https://img.shields.io/badge/Tecnolog%C3%ADas-Python%20%2F%20Pandas-yellow?style=flat-square&logo=python)](https://pandas.pydata.org/)
+[![Licencia](https://img.shields.io/badge/Licencia-MIT-green?style=flat-square)](https://opensource.org/licenses/MIT)
+
 Este repositorio contiene un proyecto completo de **Minería de Datos y Ciencia de Datos** aplicado al ámbito educativo. El objetivo principal es identificar y modelar los factores socio-ambientales, familiares y de comportamiento que influyen de manera más determinante en el rendimiento académico final (calificación G3) de los estudiantes.
 
 El proyecto está diseñado bajo un enfoque metodológico riguroso, aplicando técnicas de **aprendizaje supervisado (Regresión Lineal)** y **no supervisado (Clustering con K-Means)** sobre el conjunto de datos de rendimiento escolar de Portugal (UCI Machine Learning Repository).
