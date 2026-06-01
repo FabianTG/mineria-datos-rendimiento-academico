@@ -6,14 +6,20 @@ from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_squared_error, r2_score
 import json
+import os
 
-# Cargar datos limpios
-df = pd.read_csv('/home/ubuntu/proyecto_mineria/data_clean/student_clean.csv')
+# Determinar la ruta base del repositorio dinámicamente
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Cargar datos limpios usando ruta relativa
+df = pd.read_csv(os.path.join(BASE_DIR, 'data_clean', 'student_clean.csv'))
 
 # --- TÉCNICA 1: REGRESIÓN LINEAL (Predecir G3 - Nota Final) ---
 # Seleccionamos variables numéricas relevantes
+# EXPLICACIÓN: Se remueven G1 y G2 para evitar el "Target Leakage" (fuga de datos del objetivo),
+# lo cual hacía que el modelo fuera artificialmente perfecto (R2=0.78) pero inútil para predicciones tempranas.
 features_reg = ['age', 'Medu', 'Fedu', 'traveltime', 'studytime', 'failures', 
-                'famrel', 'freetime', 'goout', 'Dalc', 'Walc', 'health', 'absences', 'G1', 'G2']
+                'famrel', 'freetime', 'goout', 'Dalc', 'Walc', 'health', 'absences']
 X = df[features_reg]
 y = df['G3']
 
@@ -43,16 +49,18 @@ df['cluster'] = kmeans.fit_predict(X_scaled)
 # Resumen de clusters
 cluster_summary = df.groupby('cluster')[features_cluster + ['G3']].mean().to_dict()
 
-# Guardar resultados para el informe
+# Guardar resultados para el informe en ruta relativa
 results = {
     "regresion": reg_results,
     "clustering": cluster_summary
 }
 
-with open('/home/ubuntu/proyecto_mineria/resultados_analisis.json', 'w') as f:
+results_path = os.path.join(BASE_DIR, 'resultados_analisis.json')
+with open(results_path, 'w') as f:
     json.dump(results, f, indent=4)
 
-# Guardar dataset con clusters
-df.to_csv('/home/ubuntu/proyecto_mineria/data_clean/student_with_clusters.csv', index=False)
+# Guardar dataset con clusters en ruta relativa
+output_cluster_path = os.path.join(BASE_DIR, 'data_clean', 'student_with_clusters.csv')
+df.to_csv(output_cluster_path, index=False)
 
-print("Análisis completado. Resultados guardados en resultados_analisis.json")
+print(f"Análisis completado. Resultados guardados en {results_path}")

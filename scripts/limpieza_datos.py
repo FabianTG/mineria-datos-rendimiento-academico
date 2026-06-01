@@ -1,11 +1,14 @@
 import pandas as pd
 import os
 
-# Crear directorio para datos limpios
-os.makedirs('/home/ubuntu/proyecto_mineria/data_clean', exist_ok=True)
+# Determinar la ruta base del repositorio dinámicamente
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# Cargar el dataset (el separador es coma en esta versión del archivo)
-df = pd.read_csv('/home/ubuntu/proyecto_mineria/data/student-mat.csv')
+# Crear directorio para datos limpios de forma relativa
+os.makedirs(os.path.join(BASE_DIR, 'data_clean'), exist_ok=True)
+
+# Cargar el dataset usando ruta relativa
+df = pd.read_csv(os.path.join(BASE_DIR, 'data', 'student-mat.csv'))
 
 # 1. Identificar valores faltantes y duplicados
 missing_values = df.isnull().sum().sum()
@@ -16,7 +19,6 @@ print(f"Duplicados: {duplicates}")
 
 # 2. Normalizar/Estandarizar variables
 # Crearemos una variable 'attendance_rate' basada en 'absences'
-# El máximo de ausencias en este dataset suele ser alrededor de 93
 max_absences = df['absences'].max()
 if max_absences == 0: max_absences = 1 # Evitar división por cero
 df['attendance_rate'] = 1 - (df['absences'] / 100) # Usamos 100 como base teórica de días
@@ -28,8 +30,9 @@ for col in binary_cols:
     if col in df.columns:
         df[col] = df[col].map({'yes': 1, 'no': 0})
 
-# 4. Guardar versión limpia
-df.to_csv('/home/ubuntu/proyecto_mineria/data_clean/student_clean.csv', index=False)
-print("Dataset limpio guardado en /home/ubuntu/proyecto_mineria/data_clean/student_clean.csv")
+# 4. Guardar versión limpia en ruta relativa
+output_path = os.path.join(BASE_DIR, 'data_clean', 'student_clean.csv')
+df.to_csv(output_path, index=False)
+print(f"Dataset limpio guardado en {output_path}")
 print(f"Dimensiones del dataset: {df.shape}")
 print(f"Columnas: {df.columns.tolist()}")
